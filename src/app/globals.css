@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F0F5F0;
+  --foreground: #202820;
+
+  --primary: #05893E;
+  --primary-dark: #047F39;
+  --primary-accent: #1A9951;
+
+  --border: #E1E8E1;
+  --card: #FAFCFA;
+  --surface: #F3FBFA;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-bazar-background: #F0F5F0;
+  --color-bazar-border: #E1E8E1;
+  --color-bazar-card: #FAFCFA;
+  --color-bazar-primary: #05893E;
+  --color-bazar-surface: #F3FBFA;
+  --color-bazar-dark: #047F39;
+  --color-bazar-accent: #1A9951;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  width: min(100% - 32px, 1180px);
+  margin-inline: auto;
+}
+
+::selection {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* Hide horizontal scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: min(100% - 24px, 1180px);
+  }
+}
+
+/* Continuous price ticker */
+.ticker-track {
+  width: max-content;
+  animation: ticker-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}
+
