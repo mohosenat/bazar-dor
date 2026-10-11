@@ -1,16 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  Menu,
-  X,
-  UserRound,
-  LogOut,
-  ChevronDown,
-} from "lucide-react";
+import { UserRound, LogOut, ChevronDown } from "lucide-react";
 
+import logoImage from "@/assets/logo-icon.png";
 import type { Category, Product } from "@/types/product";
 import { authClient } from "@/lib/auth-client";
 import PriceTicker from "./PriceTicker";
@@ -25,7 +21,6 @@ export default function Navbar({
   const pathname = usePathname();
   const router = useRouter();
 
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [date, setDate] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
@@ -54,13 +49,17 @@ export default function Navbar({
     })),
   ];
 
+  const userInitial = (user?.name || user?.email || "U")
+    .trim()
+    .charAt(0)
+    .toLocaleUpperCase();
+
   async function handleLogout() {
     setLoggingOut(true);
 
     try {
       await authClient.signOut();
       setUserMenuOpen(false);
-      setMobileOpen(false);
       router.push("/");
       router.refresh();
     } finally {
@@ -69,23 +68,27 @@ export default function Navbar({
   }
 
   function closeMenus() {
-    setMobileOpen(false);
     setUserMenuOpen(false);
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-emerald-100 bg-[#FAFCFA]/95 shadow-sm backdrop-blur-xl">
       <div className="container">
-        {/* Logo and account */}
+        {/* Logo and Account */}
         <div className="flex min-h-[68px] items-center justify-between gap-3">
           <Link
             href="/"
             onClick={closeMenus}
             className="flex min-w-0 items-center gap-2.5"
           >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-600 text-xl text-white">
-              🛒
-            </span>
+            <Image
+              src={logoImage}
+              alt="বাজার দর লোগো"
+              width={42}
+              height={42}
+              priority
+              className="h-10 w-10 shrink-0 rounded-xl object-contain"
+            />
 
             <span>
               <strong className="block text-lg font-black text-slate-900 sm:text-xl">
@@ -104,35 +107,42 @@ export default function Navbar({
                   type="button"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   aria-expanded={userMenuOpen}
-                  className="flex items-center gap-2 rounded-xl p-2 hover:bg-slate-50"
+                  className="flex items-center gap-2 rounded-xl p-2 transition hover:bg-emerald-50"
                 >
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-emerald-700">
-                    <UserRound size={19} />
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 text-sm font-extrabold text-emerald-800 ring-1 ring-emerald-200">
+                    {userInitial}
                   </span>
 
-                  <span className="hidden max-w-28 truncate text-sm font-semibold sm:block">
+                  <span className="hidden max-w-28 truncate text-sm font-semibold text-slate-800 sm:block">
                     {user.name || "আমার অ্যাকাউন্ট"}
                   </span>
 
-                  <ChevronDown size={15} className="hidden sm:block" />
+                  <ChevronDown size={15} className="hidden text-slate-500 sm:block" />
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-100 bg-white p-3 shadow-xl">
-                    <p className="truncate text-sm font-bold text-slate-800">
-                      {user.name || "ব্যবহারকারী"}
-                    </p>
+                  <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-emerald-100 bg-white p-3 shadow-xl">
+                    <div className="flex items-center gap-3 p-2">
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-emerald-100 font-extrabold text-emerald-800">
+                        {userInitial}
+                      </span>
 
-                    <p className="mt-1 truncate text-xs text-slate-500">
-                      {user.email}
-                    </p>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-bold text-slate-800">
+                          {user.name || "ব্যবহারকারী"}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-slate-500">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
 
-                    <div className="my-3 border-t border-slate-100" />
+                    <div className="my-2 border-t border-slate-100" />
 
                     <Link
                       href="/profile"
                       onClick={closeMenus}
-                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm hover:bg-emerald-50"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition hover:bg-emerald-50"
                     >
                       <UserRound size={16} />
                       আমার প্রোফাইল
@@ -142,9 +152,9 @@ export default function Navbar({
                       type="button"
                       onClick={handleLogout}
                       disabled={loggingOut}
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-red-600 transition hover:bg-red-50 disabled:opacity-50"
                     >
-                      <LogOut size={16} />
+                      <span className="text-lg leading-none">↪</span>
                       {loggingOut ? "অপেক্ষা করুন..." : "সাইন আউট"}
                     </button>
                   </div>
@@ -154,29 +164,28 @@ export default function Navbar({
               <>
                 <Link
                   href="/signin"
-                  className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 sm:text-sm"
+                  className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-emerald-50 sm:text-sm"
                 >
                   সাইন ইন
                 </Link>
 
                 <Link
                   href="/signup"
-                  className="rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 sm:text-sm"
+                  className="rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700 sm:text-sm"
                 >
                   সাইন আপ
                 </Link>
               </>
             ) : (
-              <span className="h-9 w-20 animate-pulse rounded-xl bg-slate-100" />
+              <span className="h-9 w-20 animate-pulse rounded-xl bg-emerald-50" />
             )}
-
           </div>
         </div>
 
-        {/* Single category navigation */}
+        {/* Category Navigation */}
         <nav
           aria-label="পণ্যের ক্যাটাগরি"
-          className="flex min-h-11 items-center gap-2 overflow-x-auto border-t border-slate-100 py-1"
+          className="flex min-h-11 items-center gap-2 overflow-x-auto border-t border-emerald-100 py-1"
         >
           {navCategories.map((category) => {
             const active =
@@ -193,8 +202,8 @@ export default function Navbar({
                 aria-current={active ? "page" : undefined}
                 className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold transition ${
                   active
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-emerald-700"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-700"
                 }`}
               >
                 {category.icon} {category.name}
@@ -202,49 +211,9 @@ export default function Navbar({
             );
           })}
         </nav>
-
-        {/* Mobile menu */}
-        {mobileOpen && (
-          <div className="border-t border-slate-100 py-3 sm:hidden">
-            {user && (
-              <Link
-                href="/profile"
-                onClick={closeMenus}
-                className="mb-2 flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-sm font-semibold text-emerald-700"
-              >
-                <UserRound size={18} />
-                আমার প্রোফাইল
-              </Link>
-            )}
-
-            {!isPending && user && (
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={loggingOut}
-                className="mb-2 flex w-full items-center gap-2 rounded-xl bg-red-50 p-3 text-left text-sm font-semibold text-red-600 disabled:opacity-50"
-              >
-                <LogOut size={18} />
-                {loggingOut ? "অপেক্ষা করুন..." : "সাইন আউট"}
-              </button>
-            )}
-
-            <div className="grid grid-cols-2 gap-2">
-              {navCategories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={category.href}
-                  onClick={closeMenus}
-                  className="rounded-xl bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-700"
-                >
-                  {category.icon} {category.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
+      {/* Scrolling Price Ticker */}
       <PriceTicker products={products} />
     </header>
   );
