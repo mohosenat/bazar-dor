@@ -3,6 +3,23 @@
 import type { Product } from "@/types/product";
 import { formatPercentage, toBanglaNumber } from "@/lib/utils";
 
+function getBanglaUnit(unit: string) {
+  const units: Record<string, string> = {
+    kg: "কেজি",
+    kilogram: "কেজি",
+    gram: "গ্রাম",
+    liter: "লিটার",
+    litre: "লিটার",
+    ml: "মিলিলিটার",
+    piece: "টি",
+    pcs: "টি",
+    dozen: "ডজন",
+    pound: "পাউন্ড",
+  };
+
+  return units[unit.toLowerCase()] ?? unit;
+}
+
 export default function PriceTicker({
   products,
 }: {
@@ -13,7 +30,7 @@ export default function PriceTicker({
   if (!items.length) return null;
 
   return (
-    <div className="overflow-hidden border-y border-slate-100 bg-slate-50">
+    <div className="overflow-hidden border-t border-[#E1E8E1] bg-[#FAFCFA]">
       <div className="ticker-track flex w-max">
         {[...items, ...items].map((p, i) => (
           <div
@@ -30,15 +47,15 @@ export default function PriceTicker({
               ৳{toBanglaNumber(p.today)}
             </span>
 
-            <span className="whitespace-nowrap text-slate-500">
-              / {p.unit}
+            <span className="whitespace-nowrap font-bold text-slate-700">
+              / {getBanglaUnit(p.unit)}
             </span>
 
             <span
               className={
                 p.change.dir === "up"
-                  ? "whitespace-nowrap font-bold text-red-500"
-                  : "whitespace-nowrap font-bold text-green-600"
+                  ? "whitespace-nowrap font-bold text-red-600"
+                  : "whitespace-nowrap font-bold text-green-700"
               }
             >
               {p.change.dir === "up" ? "▲" : "▼"}{" "}
