@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { UserRound, LogOut, ChevronDown } from "lucide-react";
+import { UserRound, ChevronDown } from "lucide-react";
 
 import logoImage from "@/assets/logo-icon.png";
 import type { Category, Product } from "@/types/product";
@@ -72,26 +72,26 @@ export default function Navbar({
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-emerald-100 bg-[#FAFCFA]/95 shadow-sm backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#E1E8E1] bg-[#FAFCFA]/95 shadow-sm backdrop-blur-xl">
+      {/* Logo and Account */}
       <div className="container">
-        {/* Logo and Account */}
-        <div className="flex min-h-[68px] items-center justify-between gap-3">
+        <div className="flex min-h-[60px] items-center justify-between gap-3">
           <Link
             href="/"
             onClick={closeMenus}
-            className="flex min-w-0 items-center gap-2.5"
+            className="flex min-w-0 items-center gap-2"
           >
             <Image
               src={logoImage}
               alt="বাজার দর লোগো"
-              width={42}
-              height={42}
+              width={38}
+              height={38}
               priority
-              className="h-10 w-10 shrink-0 rounded-xl object-contain"
+              className="h-9 w-9 shrink-0 rounded-lg object-contain"
             />
 
             <span>
-              <strong className="block text-lg font-black text-slate-900 sm:text-xl">
+              <strong className="block text-base font-extrabold text-slate-900 sm:text-lg">
                 বাজার দর
               </strong>
               <small className="block text-[10px] text-slate-500">
@@ -100,16 +100,17 @@ export default function Navbar({
             </span>
           </Link>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5">
             {!isPending && user ? (
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   aria-expanded={userMenuOpen}
-                  className="flex items-center gap-2 rounded-xl p-2 transition hover:bg-emerald-50"
+                  aria-label="অ্যাকাউন্ট মেনু"
+                  className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition-colors hover:bg-[#E1F4E8]/50"
                 >
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 text-sm font-extrabold text-emerald-800 ring-1 ring-emerald-200">
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#05893E] text-sm font-extrabold text-white ring-1">
                     {userInitial}
                   </span>
 
@@ -117,13 +118,18 @@ export default function Navbar({
                     {user.name || "আমার অ্যাকাউন্ট"}
                   </span>
 
-                  <ChevronDown size={15} className="hidden text-slate-500 sm:block" />
+                  <ChevronDown
+                    size={14}
+                    className={`hidden text-emerald-800 transition-transform sm:block ${
+                      userMenuOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-emerald-100 bg-white p-3 shadow-xl">
+                  <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-xl border border-[#E1E8E1] bg-[#FAFCFA] p-3 shadow-lg shadow-emerald-900/10">
                     <div className="flex items-center gap-3 p-2">
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-emerald-100 font-extrabold text-emerald-800">
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-emerald-600 font-extrabold text-white">
                         {userInitial}
                       </span>
 
@@ -137,12 +143,12 @@ export default function Navbar({
                       </div>
                     </div>
 
-                    <div className="my-2 border-t border-slate-100" />
+                    <div className="my-2 border-t border-emerald-100" />
 
                     <Link
                       href="/profile"
                       onClick={closeMenus}
-                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition hover:bg-emerald-50"
+                      className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition-colors hover:bg-[#E1F4E8]/50 hover:text-emerald-800"
                     >
                       <UserRound size={16} />
                       আমার প্রোফাইল
@@ -152,7 +158,7 @@ export default function Navbar({
                       type="button"
                       onClick={handleLogout}
                       disabled={loggingOut}
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-red-600 transition hover:bg-red-50 disabled:opacity-50"
+                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-red-700 transition-colors hover:bg-red-50 disabled:opacity-50"
                     >
                       <span className="text-lg leading-none">↪</span>
                       {loggingOut ? "অপেক্ষা করুন..." : "সাইন আউট"}
@@ -164,53 +170,57 @@ export default function Navbar({
               <>
                 <Link
                   href="/signin"
-                  className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-emerald-50 sm:text-sm"
+                  className="rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:bg-[#E1F4E8]/50 hover:text-emerald-800 sm:text-sm"
                 >
                   সাইন ইন
                 </Link>
 
                 <Link
                   href="/signup"
-                  className="rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700 sm:text-sm"
+                  className="rounded-lg bg-emerald-700 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-emerald-800 sm:text-sm"
                 >
                   সাইন আপ
                 </Link>
               </>
             ) : (
-              <span className="h-9 w-20 animate-pulse rounded-xl bg-emerald-50" />
+              <span className="h-8 w-20 animate-pulse rounded-lg bg-emerald-100" />
             )}
           </div>
         </div>
+      </div>
 
-        {/* Category Navigation */}
-        <nav
-          aria-label="পণ্যের ক্যাটাগরি"
-          className="flex min-h-11 items-center gap-2 overflow-x-auto border-t border-emerald-100 py-1"
-        >
-          {navCategories.map((category) => {
-            const active =
-              category.href === "/"
-                ? pathname === "/"
-                : pathname === category.href ||
-                  pathname.startsWith(`${category.href}/`);
+      {/* Full-width divider and category navigation */}
+      <div className="border-t-[0.5px] border-[#EDF1ED]">
+        <div className="container">
+          <nav
+            aria-label="পণ্যের ক্যাটাগরি"
+            className="flex min-h-10 items-center gap-1.5 overflow-x-auto py-1"
+          >
+            {navCategories.map((category) => {
+              const active =
+                category.href === "/"
+                  ? pathname === "/"
+                  : pathname === category.href ||
+                    pathname.startsWith(`${category.href}/`);
 
-            return (
-              <Link
-                key={category.id}
-                href={category.href}
-                onClick={closeMenus}
-                aria-current={active ? "page" : undefined}
-                className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-bold transition ${
-                  active
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-700"
-                }`}
-              >
-                {category.icon} {category.name}
-              </Link>
-            );
-          })}
-        </nav>
+              return (
+                <Link
+                  key={category.id}
+                  href={category.href}
+                  onClick={closeMenus}
+                  aria-current={active ? "page" : undefined}
+                  className={`shrink-0 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    active
+                      ? "rounded-lg bg-[#05893E] text-white"
+                      : "text-slate-600 hover:bg-[#E1F4E8]/50 hover:text-emerald-800"
+                  }`}
+                >
+                  {category.icon} {category.name}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       {/* Scrolling Price Ticker */}
