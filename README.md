@@ -2,14 +2,12 @@
 
 BazarDor is a Bangla-based market price tracking web application that helps users explore essential product prices in Bangladesh. Users can browse products, compare prices, view price changes, filter products by category, and manage their profiles.
 
----
 
 ## 🔗 Live Project
 
 - **Live Website:** https://bazar-dor-hazel-ten.vercel.app
 - **GitHub Repository:** https://github.com/mohosenat/bazar-dor
 
----
 
 ## 🚀 Key Features
 
@@ -73,7 +71,6 @@ Follow these steps to install and run the project on your computer.
 
 **Prerequisites:** Node.js, npm, and Git.
 
----
 
 ### 1. Clone the Repository
 
