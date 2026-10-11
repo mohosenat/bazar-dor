@@ -28,7 +28,7 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="bn">
+    <html lang="bn" data-scroll-behavior="smooth">
   <body className={`${notoBengali.className} flex min-h-screen flex-col`}>
   <Navbar categories={categories} products={products} />
 
@@ -39,7 +39,7 @@ export default async function RootLayout({
   <Footer />
 
   <Toaster
-    position="top-right"
+    position="top-center"
     toastOptions={{
       duration: 3000,
       style: {
